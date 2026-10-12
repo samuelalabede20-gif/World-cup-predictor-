@@ -1,0 +1,296 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#0a1f18"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="WC Engine"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>World Cup Infinite Engine & Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;1,6..96,600&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* Self-contained utilities (replaces the Tailwind CDN): only the classes this app uses */
+*,::before,::after{box-sizing:border-box;border:0 solid #e5e7eb}
+h1{font-size:inherit;font-weight:inherit;margin:0}
+button,input,select{font-family:inherit;font-size:100%;color:inherit;margin:0}
+button{background:none;padding:0;cursor:pointer}
+table{border-collapse:collapse}
+.hidden{display:none}.block{display:block}.flex{display:flex}.grid{display:grid}.relative{position:relative}.absolute{position:absolute}.fixed{position:fixed}
+.right-0{right:0}.top-full{top:100%}.bottom-6{bottom:1.5rem}.left-1\/2{left:50%}.-translate-x-1\/2{transform:translateX(-50%)}.z-20{z-index:20}
+.w-full{width:100%}.w-64{width:16rem}.min-w-0{min-width:0}.min-h-screen{min-height:100vh}.max-w-4xl{max-width:56rem}.mx-auto{margin-left:auto;margin-right:auto}
+.flex-1{flex:1 1 0%}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-2{gap:.5rem}
+.grid-cols-\[1fr_auto_1fr\]{grid-template-columns:1fr auto 1fr}
+.p-1{padding:.25rem}.p-2{padding:.5rem}.p-3{padding:.75rem}.p-4{padding:1rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}
+.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.pb-2{padding-bottom:.5rem}
+.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mt-1{margin-top:.25rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}.mt-6{margin-top:1.5rem}.my-2{margin-top:.5rem;margin-bottom:.5rem}
+.text-xs{font-size:.75rem;line-height:1rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}
+.font-bold{font-weight:700}.font-extrabold{font-weight:800}.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}.underline{text-decoration:underline}
+.cursor-pointer{cursor:pointer}.rounded-lg{border-radius:.5rem}.border-b{border-bottom-width:1px}.overflow-x-auto{overflow-x:auto}
+</style>
+<style>
+/* Trophy room: turf green, brass and ivory. Display type: Bodoni Moda. UI type: Manrope. */
+:root{--bg:#0a1f18;--card:rgba(241,234,214,.05);--line:rgba(201,165,91,.28);--g:#8fe0b5;--y:#d4b06a;--ink:#f1ead6;--mut:#9fb3a8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);color-scheme:dark;background:#07150f}
+body{margin:0;color:var(--ink);font-family:Manrope,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:radial-gradient(1100px 620px at 50% -8%,#15402f 0%,#0a1f18 58%,#07150f 100%) fixed}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 34%,transparent 108px,rgba(241,234,214,.06) 109px,rgba(241,234,214,.06) 111px,transparent 112px),linear-gradient(rgba(241,234,214,.04),rgba(241,234,214,.04)) 0 34%/100% 1px no-repeat}
+.max-w-4xl{position:relative;z-index:1}
+.serif,h1,#sec,.text-3xl,.text-2xl,.text-xl,.champ{font-family:'Bodoni Moda',Georgia,'Times New Roman',serif}
+#sec{font-style:italic;font-size:1.15rem}
+.ttl{font-weight:800;letter-spacing:.01em;color:var(--ink)}
+.card{background:linear-gradient(180deg,rgba(241,234,214,.07),rgba(241,234,214,.03));border:1px solid var(--line);border-radius:8px;box-shadow:inset 0 0 0 3px rgba(10,31,24,.55),inset 0 0 0 4px rgba(201,165,91,.12),0 10px 28px rgba(0,0,0,.35)}
+.btn{background:linear-gradient(180deg,#e6c98a,#b88f3f);color:#10241b;font-weight:700;border-radius:999px;padding:.6rem 1.15rem;box-shadow:0 2px 0 #7a5c22,0 8px 18px rgba(0,0,0,.35);transition:transform .12s,box-shadow .12s,filter .2s}
+.btn:active{transform:translateY(2px);box-shadow:0 0 0 #7a5c22,0 4px 10px rgba(0,0,0,.35)}
+.btn2{background:rgba(241,234,214,.06);border:1px solid var(--line);border-radius:999px;padding:.5rem .9rem;color:var(--ink);transition:border-color .2s,background .2s}
+.btn2:active{background:rgba(241,234,214,.13)}.btn2[disabled]{opacity:.4}
+@media(hover:hover){.btn:hover{filter:brightness(1.08)}.btn2:hover{border-color:var(--y)}}
+.sc{overflow-x:auto}
+th{color:var(--mut);font-weight:600;text-align:left;border-bottom:1px solid var(--line)}
+td,th{padding:.4rem .55rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+td{border-bottom:1px solid rgba(241,234,214,.06)}
+tr.cursor-pointer:active td{background:rgba(201,165,91,.14)}
+input,select{background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:6px;padding:.5rem .65rem;color:var(--ink);font:inherit}
+input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--y);outline-offset:2px}
+.text-slate-400{color:var(--mut)!important}.text-slate-300{color:#c9d3cc!important}
+summary{list-style:none;cursor:pointer}summary::-webkit-details-marker{display:none}
+summary::after{content:"";float:right;width:8px;height:8px;margin-top:6px;border-right:2px solid var(--y);border-bottom:2px solid var(--y);transform:rotate(45deg);transition:transform .25s}
+details[open]>summary::after{transform:rotate(225deg)}
+details[open]>div{animation:openIn .3s ease-out}
+#nav{background:#0f2a20;border:1px solid var(--line);border-radius:10px;box-shadow:0 18px 40px rgba(0,0,0,.6);z-index:40;padding:6px}
+#nav:not(.hidden){animation:pop .18s ease-out;transform-origin:top right}
+#nav button{display:block;width:100%;font:inherit;font-size:.98rem;color:var(--ink);background:none;border:0;text-align:left;padding:.7rem .85rem;border-radius:8px}
+#nav button:active{background:rgba(212,176,106,.22)}
+.ttl{font-size:1.05rem;line-height:1.15}
+#sec{font-size:1rem}
+/* win / draw / loss chips */
+.wdl{display:inline-block;width:1.5rem;text-align:center;font-weight:800;font-size:.75rem;border-radius:4px;padding:.1rem 0}.wdl.W{background:rgba(143,224,181,.18);color:var(--g)}.wdl.D{background:rgba(212,176,106,.18);color:var(--y)}.wdl.L{background:rgba(233,139,130,.18);color:#e98b82}
+#nx{white-space:nowrap;flex-shrink:0;font-size:.82rem;padding:.45rem .8rem}
+#v>*{animation:fadeIn .28s ease-out both}
+.shine{font-size:2.3rem;line-height:1.1;font-weight:800;font-family:'Bodoni Moda',Georgia,serif;background:linear-gradient(100deg,#f3dca2 20%,#c9a55b 50%,#f3dca2 80%) 0 0/200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 1.6s ease-out .3s 1 both}
+.rk{font-family:'Bodoni Moda',Georgia,serif;font-weight:800}.r1{color:#e6c677}.r2{color:#d3dadc}.r3{color:#c98f5f}
+#cele{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;overflow:hidden;background:radial-gradient(circle at 50% 38%,#1d3d2e,#06120d 72%);animation:fadeIn .5s}
+#cele::before{content:"";position:absolute;width:140vmax;height:140vmax;left:50%;top:38%;margin:-70vmax 0 0 -70vmax;background:repeating-conic-gradient(rgba(241,234,214,.06) 0 6deg,transparent 6deg 18deg);animation:spin 50s linear infinite;pointer-events:none}
+#cele>:not(.cf){position:relative}
+.tro{font-size:88px;line-height:1;animation:rise 1s cubic-bezier(.2,.8,.2,1) both}
+.champ{font-size:2.6rem;font-weight:800;line-height:1.1;color:#f3dca2;margin-top:10px}
+.champ span{display:inline-block;opacity:0;animation:letter .5s ease-out forwards}
+.cf{position:fixed;top:-16px;width:7px;height:13px;border-radius:1px;animation:fall linear forwards;pointer-events:none;z-index:51}
+#splash{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#07150f;animation:splashOut .5s ease-in 1.3s forwards;pointer-events:none}
+#splash .serif{font-size:1.4rem;opacity:0;animation:fadeIn .6s .5s forwards}
+#splogo svg{animation:logoIn .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+@keyframes openIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+@keyframes sheen{from{background-position:120% 0}to{background-position:-20% 0}}
+@keyframes rise{from{opacity:0;transform:translateY(40px) scale(.7)}to{opacity:1;transform:none}}
+@keyframes letter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes fall{to{transform:translateY(108vh) rotate(680deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes logoIn{from{opacity:0;transform:scale(.6) rotate(-25deg)}to{opacity:1;transform:none}}
+@keyframes splashOut{to{opacity:0;visibility:hidden}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition:none!important}#splash,#cele::before{display:none}}
+</style></head>
+<body><div class="max-w-4xl mx-auto p-3">
+<header class="flex items-center justify-between relative"><h1 class="text-xl font-extrabold flex items-center gap-2 cursor-pointer" onclick="go('d')"><span id="logo"></span><span class="ttl">World Cup Infinite Engine</span></h1>
+<button id="mb" class="btn2" aria-label="Menu" onclick="menu()"><svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="3.5" r="2"/><circle cx="10" cy="10" r="2"/><circle cx="10" cy="16.5" r="2"/></svg></button>
+<div id="nav" class="hidden card absolute right-0 top-full mt-1 z-20 w-64 p-1"></div></header>
+<div class="flex items-center justify-between gap-2 my-2 pb-2 border-b" style="border-color:var(--line)"><span id="sec" class="text-sm font-bold" style="color:var(--y)"></span><button id="nx" class="btn text-sm" style="padding:.4rem .75rem" onclick="nextStep()"></button></div>
+<main id="v"></main></div>
+<div id="splash"><div id="splogo"></div><div class="serif">World Cup Infinite Engine</div></div>
+<div id="toast" class="fixed left-1/2 -translate-x-1/2 bottom-6 card px-4 py-2 text-sm" style="opacity:0;transition:.3s"></div>
+<script>
+const RAW="Spain:U:98:96,France:U:99:95,England:U:97:94,Portugal:U:96:91,Germany:U:94:90,Netherlands:U:93:93,Italy:U:90:92,Belgium:U:92:89,Croatia:U:90:91,Switzerland:U:86:89,Denmark:U:85:87,Austria:U:85:86,Norway:U:92:80,Türkiye:U:87:80,Sweden:U:85:79,Poland:U:80:82,Ukraine:U:82:82,Serbia:U:84:78,Hungary:U:78:78,Czechia:U:72:72,Scotland:U:77:80,Wales:U:76:79,Slovakia:U:74:78,Slovenia:U:71:73,Greece:U:75:78,Romania:U:71:71,Russia:U:80:81,Iceland:U:67:67,Finland:U:67:67,Georgia:U:68:67,Israel:U:66:66,Ireland:U:68:74,Northern Ireland:U:65:73,Albania:U:69:69,North Macedonia:U:66:68,Bosnia and Herzegovina:U:73:69,Montenegro:U:65:67,Kosovo:U:67:65,Bulgaria:U:62:66,Belarus:U:62:64,Luxembourg:U:60:64,Cyprus:U:56:60,Malta:U:50:54,Estonia:U:55:63,Latvia:U:52:58,Lithuania:U:51:59,Azerbaijan:U:56:60,Armenia:U:59:61,Faroe Islands:U:55:61,Andorra:U:46:52,San Marino:U:40:41,Liechtenstein:U:41:45,Kazakhstan:U:59:59,Gibraltar:U:42:46,Moldova:U:51:55,Argentina:S:97:97,Brazil:S:96:92,Uruguay:S:91:90,Colombia:S:92:90,Ecuador:S:85:90,Paraguay:S:77:85,Chile:S:71:74,Peru:S:69:75,Venezuela:S:71:75,Bolivia:S:63:69,Morocco:A:90:94,Senegal:A:87:87,Egypt:A:86:82,Algeria:A:85:82,Côte d'Ivoire:A:85:82,Nigeria:A:86:80,Cameroon:A:79:78,Ghana:A:69:67,Mali:A:73:73,Burkina Faso:A:70:70,South Africa:A:71:75,DR Congo:A:78:78,Tunisia:A:67:73,Cabo Verde:A:67:69,Gabon:A:64:64,Guinea:A:65:65,Angola:A:63:65,Zambia:A:63:63,Uganda:A:63:65,Benin:A:62:66,Equatorial Guinea:A:60:62,Mozambique:A:62:62,Madagascar:A:61:61,Comoros:A:60:62,Gambia:A:60:60,Mauritania:A:58:62,Niger:A:59:61,Libya:A:58:60,Kenya:A:57:61,Tanzania:A:57:61,Sudan:A:59:59,Rwanda:A:57:61,Togo:A:58:60,Namibia:A:56:60,Guinea-Bissau:A:58:58,Zimbabwe:A:57:59,Sierra Leone:A:55:59,Malawi:A:57:57,Central African Republic:A:52:58,Botswana:A:54:56,Liberia:A:55:55,Burundi:A:54:56,Ethiopia:A:54:56,Lesotho:A:52:56,Eswatini:A:50:52,Congo:A:56:58,Eritrea:A:45:49,South Sudan:A:49:51,Djibouti:A:43:47,Somalia:A:43:45,Seychelles:A:42:44,Mauritius:A:46:50,Chad:A:46:48,Sao Tome and Principe:A:43:47,Japan:F:89:87,South Korea:F:84:84,IR Iran:F:80:86,Australia:F:78:84,Saudi Arabia:F:71:73,Qatar:F:69:71,Iraq:F:70:70,United Arab Emirates:F:68:70,Uzbekistan:F:69:71,Jordan:F:66:68,Oman:F:63:67,Bahrain:F:62:64,Syria:F:63:65,Palestine:F:62:64,Lebanon:F:59:61,Kuwait:F:55:57,China:F:61:65,Thailand:F:63:63,Vietnam:F:62:62,Indonesia:F:59:59,India:F:53:59,Korea DPR:F:56:62,Hong Kong:F:51:55,Singapore:F:51:57,Chinese Taipei:F:47:51,Philippines:F:55:57,Turkmenistan:F:54:58,Tajikistan:F:61:63,Kyrgyzstan:F:60:62,Mongolia:F:44:48,Macau:F:45:47,Pakistan:F:43:47,Timor-Leste:F:42:46,Guam:F:42:46,Sri Lanka:F:45:49,Bhutan:F:45:47,Bangladesh:F:45:49,Laos:F:44:48,Brunei Darussalam:F:44:46,Cambodia:F:46:50,Maldives:F:47:51,Afghanistan:F:47:53,Malaysia:F:55:57,Myanmar:F:50:54,Nepal:F:47:49,Yemen:F:53:57,Mexico:C:86:86,United States:C:86:84,Canada:C:82:80,Costa Rica:C:71:73,Panama:C:71:75,Jamaica:C:68:68,Honduras:C:69:69,Haiti:C:66:62,Curaçao:C:66:64,Guatemala:C:62:64,El Salvador:C:61:63,Trinidad and Tobago:C:60:62,Suriname:C:58:58,Nicaragua:C:54:58,Cuba:C:50:52,Dominican Republic:C:55:57,Guyana:C:54:56,Puerto Rico:C:51:55,Bermuda:C:48:52,Saint Lucia:C:49:53,Saint Kitts and Nevis:C:52:56,Antigua and Barbuda:C:51:53,St. Vincent and the Grenadines:C:49:53,Grenada:C:49:51,Barbados:C:47:51,Belize:C:46:50,Dominica:C:46:48,Bahamas:C:41:43,Montserrat:C:49:51,Aruba:C:46:48,Cayman Islands:C:44:46,Turks and Caicos Islands:C:44:44,US Virgin Islands:C:42:44,British Virgin Islands:C:42:42,Anguilla:C:41:41,New Zealand:O:63:65,New Caledonia:O:51:55,Solomon Islands:O:52:56,Fiji:O:51:55,Papua New Guinea:O:49:53,Vanuatu:O:51:53,Tahiti:O:51:55,Tonga:O:43:45,Samoa:O:44:48,American Samoa:O:46:46,Cook Islands:O:46:48";
+// Official FIFA ranking points (7 Oct 2026): the game starts from these
+const PTS="Spain:2011.57,Argentina:1972.8,France:1958.86,England:1925.59,Portugal:1807.69,Brazil:1806.51,Morocco:1805.34,Belgium:1779.17,Netherlands:1778.61,Mexico:1738.48,Colombia:1735.8,Switzerland:1725.39,Germany:1717.52,Croatia:1714.74,Italy:1713.04,United States:1705.47,Japan:1684.75,Senegal:1648.84,Norway:1637.89,Uruguay:1635.54,Denmark:1619.62,Austria:1600.66,IR Iran:1597.31,Ecuador:1587.07,Egypt:1585.86,Australia:1580.52,Canada:1575.31,Algeria:1574.77,Côte d'Ivoire:1569.32,Nigeria:1567.97,Türkiye:1563.54,South Korea:1562.49,Paraguay:1552.3,Sweden:1543.8,Russia:1537.45,Ukraine:1535.27,Poland:1514.58,Hungary:1511.24,Wales:1510.37,DR Congo:1506.37,Greece:1498.71,Cameroon:1485.3,Scotland:1483.57,Serbia:1482.24,Slovakia:1477.34,Panama:1476.97,Mali:1474.14,South Africa:1468.88,Venezuela:1465.87,Chile:1458.97,Czechia:1457.12,Slovenia:1452.48,Peru:1450.95,Costa Rica:1444.85,Saudi Arabia:1443.17,Ireland:1438.62,Bosnia and Herzegovina:1429.32,Romania:1428.88,Uzbekistan:1416.61,Qatar:1416.47,Tunisia:1415.38,Burkina Faso:1407.8,Iraq:1400.91,Northern Ireland:1383.86,United Arab Emirates:1376.95,Albania:1375.78,Honduras:1375.4,Cabo Verde:1373.58,Jamaica:1361.97,Ghana:1361.27,North Macedonia:1350.91,Jordan:1350.88,Iceland:1349.42,Georgia:1345.88,Finland:1340.73,Kosovo:1328.14,Israel:1325.52,Bolivia:1322.19,Montenegro:1315.49,Curaçao:1304.98,Oman:1302.77,Guinea:1296.67,Angola:1281.79,Haiti:1280.91,Gabon:1280.12,Syria:1279.94,Uganda:1278.26,New Zealand:1277.02,Benin:1266.01,Bulgaria:1262.57,Zambia:1260.61,Palestine:1253.75,Thailand:1251.42,Belarus:1249.6,Guatemala:1245.1,China:1241.9,Bahrain:1240.3,Mozambique:1238.23,Vietnam:1231.29,Tajikistan:1218.88,Luxembourg:1218.88,El Salvador:1218.8,Equatorial Guinea:1212.4,Kyrgyzstan:1200.39,Trinidad and Tobago:1199.73,Madagascar:1198.85,Comoros:1197.24,Armenia:1192.28,Gambia:1183.26,Mauritania:1182.64,Niger:1176.05,Lebanon:1172.93,Libya:1170.3,Kenya:1168.89,Tanzania:1168.67,Indonesia:1166.82,Kazakhstan:1166.5,Sudan:1166.26,Rwanda:1156.74,Togo:1156.16,Korea DPR:1153.04,Estonia:1151.05,Namibia:1147.12,Guinea-Bissau:1146.48,Cyprus:1144.03,Faroe Islands:1142.43,Azerbaijan:1140.1,Suriname:1138.96,Zimbabwe:1138.46,Sierra Leone:1128.05,Malawi:1123.2,Congo:1121.84,Malaysia:1102.46,Kuwait:1102.09,Dominican Republic:1098.64,Philippines:1096.58,Nicaragua:1095.85,India:1090.8,Turkmenistan:1086.43,Burundi:1078.65,Botswana:1076.75,Guyana:1073.85,Latvia:1071.38,Yemen:1069.33,Central African Republic:1067.53,Liberia:1065.15,Ethiopia:1064.58,Lithuania:1064.46,Singapore:1059.2,Lesotho:1058.95,Saint Kitts and Nevis:1053.09,Solomon Islands:1041.42,Hong Kong:1035.95,Fiji:1035.23,Puerto Rico:1033.44,New Caledonia:1032.97,Tahiti:1026.01,Moldova:1016.32,Myanmar:1015.57,Malta:1008.08,Vanuatu:1006.8,Antigua and Barbuda:1005.9,Cuba:992.54,Eswatini:990.46,Saint Lucia:979.01,St. Vincent and the Grenadines:975.85,Papua New Guinea:974.89,Afghanistan:969.14,Grenada:968.07,South Sudan:967.71,Bermuda:959.91,Montserrat:951.28,Maldives:939.13,Barbados:935.93,Andorra:934.52,Chinese Taipei:927.53,Cambodia:923.78,Nepal:920.83,Mauritius:914.54,Belize:906.24,Chad:900.38,Bangladesh:896.85,Eritrea:893.46,Sri Lanka:890.97,Aruba:890.64,Dominica:889.53,Cook Islands:884.58,Laos:880.25,Samoa:880.17,Mongolia:876.41,American Samoa:874.47,Bhutan:871.61,Macau:870.81,Sao Tome and Principe:858.03,Djibouti:855.1,Brunei Darussalam:853.58,Pakistan:849.56,Cayman Islands:839.03,Tonga:836.15,Somalia:835.64,Gibraltar:832.14,Timor-Leste:829.49,Guam:823.16,Turks and Caicos Islands:819.54,Seychelles:806.26,US Virgin Islands:795.63,Liechtenstein:794.75,Bahamas:790.18,British Virgin Islands:771.83,Anguilla:752.75,San Marino:736.67";
+const HR="1930|Uruguay|Uruguay|Argentina|United States;1934|Italy|Italy|Czechoslovakia|Germany;1938|France|Italy|Hungary|Brazil;1950|Brazil|Uruguay|Brazil|Sweden;1954|Switzerland|West Germany|Hungary|Austria;1958|Sweden|Brazil|Sweden|France;1962|Chile|Brazil|Czechoslovakia|Chile;1966|England|England|West Germany|Portugal;1970|Mexico|Brazil|Italy|West Germany;1974|West Germany|West Germany|Netherlands|Poland;1978|Argentina|Argentina|Netherlands|Brazil;1982|Spain|Italy|West Germany|Poland;1986|Mexico|Argentina|West Germany|France;1990|Italy|West Germany|Argentina|Italy;1994|United States|Brazil|Italy|Sweden;1998|France|France|Brazil|Croatia;2002|Korea Republic / Japan|Brazil|Germany|Türkiye;2006|Germany|Italy|France|Germany;2010|South Africa|Spain|Netherlands|Germany;2014|Brazil|Germany|Argentina|Netherlands;2018|Russia|France|Croatia|Belgium;2022|Qatar|Argentina|France|Croatia;2026|United States / Canada / Mexico|Spain|Argentina|England";
+const H=HR.split(';').map(s=>{const a=s.split('|');return{y:+a[0],h:a[1],w:a[2],r:a[3],t:a[4]}});
+const CF={U:'UEFA',S:'CONMEBOL',A:'CAF',C:'CONCACAF',F:'AFC',O:'OFC'},SL={UEFA:16,CAF:9,AFC:8,CONMEBOL:6,CONCACAF:6,OFC:1},XP={CAF:1,AFC:1,CONMEBOL:1,OFC:1,CONCACAF:2};
+const HOSTS={2026:['United States','Canada','Mexico'],2030:['Spain','Portugal','Morocco'],2034:['Saudi Arabia']};
+const P=[9,9,9,10,10,11,7,7,8,6,5,4,3,2,8,10,9],R=Math.random,$=id=>document.getElementById(id),cl=(x,a,b)=>Math.max(a,Math.min(b,x));
+const N=RAW.split(',').map(x=>{const p=x.split(':');return[p[0],p[1],+p[2],+p[3]]});
+// Each team has fixed hidden strength A0/D0 (hand-set, 40-96). Starting Elo comes from it; Elo then only tracks results.
+const T=N.map(([n,c,a,d])=>({name:n,confed:CF[c],A0:a,D0:d,dev:0,elo:0}));
+const TG=t=>736.67+((t.A0+t.D0)/2+(t.dev||0)-40)*22.37;
+const refit=()=>T.forEach(t=>{t.attack=cl(Math.round(t.A0+(t.dev||0)),35,99);t.defense=cl(Math.round(t.D0+(t.dev||0)),35,99)});refit();
+const M=Object.fromEntries(T.map(t=>[t.name,t]));
+PTS.split(',').forEach(x=>{const i=x.lastIndexOf(':');M[x.slice(0,i)].elo=+x.slice(i+1)});
+let S={elo:{},hist:[],last:null,prev:{},year:2030},tab='d',hv='h',pt=null,gv=null,ga=0,ts='w',td=-1,hd=1,tq='',tc='',pg=0,hq='',rs=0;
+try{Object.assign(S,JSON.parse(localStorage.getItem('wcie3')||'{}'))}catch(e){}
+if(S.year<2030||S.hist.some(h=>h.y<2030)){S.year=2030;S.hist=[];S.last=null;S.elo={};S.form={};S.pf={};S.tr={}}
+T.forEach(t=>{if(typeof S.elo[t.name]=='number')t.elo=S.elo[t.name];if(S.form&&typeof S.form[t.name]=='number')t.form=S.form[t.name];if(S.dev&&typeof S.dev[t.name]=='number')t.dev=S.dev[t.name]});refit();if(S.tr){for(const n in S.tr)setTal(n);refit()}
+const save=()=>{try{S.elo=Object.fromEntries(T.map(t=>[t.name,t.elo]));S.form=Object.fromEntries(T.map(t=>[t.name,+(t.form||0).toFixed(2)]));S.dev=Object.fromEntries(T.map(t=>[t.name,+(t.dev||0).toFixed(2)]));localStorage.setItem('wcie3',JSON.stringify(S))}catch(e){}};
+const toast=m=>{const e=$('toast');e.textContent=m;e.style.opacity=1;setTimeout(()=>e.style.opacity=0,2200)};
+const E=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+// ---------- match engine ----------
+const pois=l=>{const L=Math.exp(-l);let k=0,p=1;do{k++;p*=R()}while(p>L);return k-1};
+const bo=t=>(t.dev||0)+(t.tal||0)+(t.form||0)*3+(t.host?3:0),str=t=>(t.A0+t.D0)/2+bo(t);
+const lam=(a,b)=>cl(1.3*Math.exp(.034*(a.A0+bo(a)-b.D0-bo(b))),.15,4.5);
+function play(a,b,ko){const m={a,b,ga:pois(lam(a,b)),gb:pois(lam(b,a)),et:0,pen:null,w:null};
+if(ko&&m.ga==m.gb){m.et=1;m.ga+=pois(lam(a,b)/3);m.gb+=pois(lam(b,a)/3)}
+if(m.ga>m.gb)m.w=a;else if(m.gb>m.ga)m.w=b;else if(ko){m.w=R()<cl(.5+(str(a)-str(b))*23/3000,.3,.7)?a:b;const k=4+Math.floor(R()*2),l=k-1-(R()<.3?1:0);m.pen=m.w===a?[k,l]:[l,k]}
+return m}
+function upd(m,I=50,wc=0){const{a,b}=m,ea=1/(Math.pow(10,-(a.elo-b.elo)/600)+1),eb=1-ea,
+sa=m.ga>m.gb?1:m.ga<m.gb?0:(m.w===a?.75:.5),sb=m.gb>m.ga?1:m.gb<m.ga?0:(m.w===b?.75:.5);let da=I*(sa-ea),db=I*(sb-eb);
+if(wc&&m.w){if(m.w===a)db=Math.max(0,db);else da=Math.max(0,da)}
+a.elo+=da;b.elo+=db;a.form=cl((a.form||0)*.8+(sa-ea)*.5*I/50,-1,1);b.form=cl((b.form||0)*.8+(sb-eb)*.5*I/50,-1,1)}
+const rec=m=>({a:m.a.name,b:m.b.name,ga:m.ga,gb:m.gb,et:m.et,pen:m.pen,w:m.w&&m.w.name,d:m.d||0});
+function run(a,b,ko,st,I=50){if(!a||!b)throw new Error('Missing team in fixture');const m=play(a,b,ko);m.d=m.w?(m.w===a?b.elo-a.elo:a.elo-b.elo):0;upd(m,I,ko&&st?1:0);
+if(st){[[a,m.ga,m.gb],[b,m.gb,m.ga]].forEach(([t,f,c])=>{st.gf[t.name]=(st.gf[t.name]||0)+f;st.ga[t.name]=(st.ga[t.name]||0)+c;st.mp[t.name]=(st.mp[t.name]||0)+1;
+for(let i=0;i<f;i++){const k=t.name+' #'+P[Math.floor(R()*P.length)];st.sc[k]=(st.sc[k]||0)+1}});if(m.d>0)st.ups.push({m:rec(m),d:Math.round(m.d)})}
+return m}
+// ---------- qualifiers ----------
+// Random host picker (used after the fixed 2030/2034 hosts): independent roll each edition, ~70% single, ~24% double, ~6% triple.
+// Co-hosts always come from the same confederation as the lead host.
+function pickHosts(){const r=R(),n=r<.06?3:r<.3?2:1,pool=[...T].sort((a,b)=>b.elo-a.elo).slice(0,60).filter(t=>t.confed!='OFC'),
+first=pool[Math.floor(R()*Math.min(40,pool.length))],same=pool.filter(t=>t.confed==first.confed&&t!==first).sort(()=>R()-.5);
+return[first,...same.slice(0,n-1)].map(t=>t.name)}
+// ---------- tournament ----------
+const so=n=>{let a=[1];while(a.length<n){const m=a.length*2+1;a=a.flatMap(x=>[x,m-x])}return a};
+const cmp=(a,b)=>b.p-a.p||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf||R()-.5;
+function table(g){const r={};g.teams.forEach(n=>r[n]={n,p:0,gf:0,ga:0,w:0,d:0,l:0});
+g.ms.forEach(m=>{const x=r[m.a],y=r[m.b];x.gf+=m.ga;x.ga+=m.gb;y.gf+=m.gb;y.ga+=m.ga;
+if(m.ga>m.gb){x.p+=3;x.w++;y.l++}else if(m.ga<m.gb){y.p+=3;y.w++;x.l++}else{x.p++;y.p++;x.d++;y.d++}});
+const h2h=(a,b)=>{const m=g.ms.find(m=>(m.a==a&&m.b==b)||(m.a==b&&m.b==a));if(!m||m.ga==m.gb)return 0;return(m.a==a?m.ga-m.gb:m.gb-m.ga)>0?1:-1};
+return Object.values(r).sort((x,y)=>y.p-x.p||(y.gf-y.ga)-(x.gf-x.ga)||y.gf-x.gf||h2h(y.n,x.n)||R()-.5)}
+// FIFA-style draw: 4 pots, one team per pot in each group; no two teams from the same confederation, except UEFA (max 2)
+function drawG(s){for(let k=0;k<500;k++){const B=Array.from({length:12},()=>[]);let ok=1;
+for(let p=0;p<4&&ok;p++){const pot=s.slice(p*12,p*12+12).sort(()=>R()-.5),used=new Set();
+for(const t of pot){const c=B.map((g,i)=>i).filter(i=>!used.has(i)&&B[i].length==p&&B[i].filter(x=>x.confed==t.confed).length<(t.confed=='UEFA'?2:1));
+if(!c.length){ok=0;break}const gi=c[Math.floor(R()*c.length)];used.add(gi);B[gi].push(t)}}
+if(ok)return B}throw new Error('Group draw failed')}
+// ---------- qualifiers: real-style confederation formats ----------
+// Teams are seeded into pots by Elo and drawn into groups (double round-robin). Groups = number of direct spots
+// (UEFA 12 + playoffs, CONMEBOL one league). Ranked by finishing position, then points per game. Qualifier Elo counts half.
+function simQ(){try{
+S.prev=Object.fromEntries(T.map(t=>[t.name,Math.round(t.elo)]));T.forEach(t=>{t.form=(t.form||0)*.5;t.host=0});
+const y=S.year,hs=(HOSTS[y]||pickHosts()).map(n=>M[n]),Q={year:y,hosts:hs.map(h=>h.name),conf:{},q:hs.map(h=>h.name),pl:[]},pool=[],
+pg=r=>r.p/Math.max(1,r.w+r.d+r.l),gd=r=>(r.gf-r.ga)/Math.max(1,r.w+r.d+r.l);
+for(const c in SL){const n=Math.max(0,SL[c]-hs.filter(h=>h.confed==c).length),ts=T.filter(t=>t.confed==c&&!hs.includes(t)).sort((a,b)=>b.elo-a.elo),
+g=c=='UEFA'?12:c=='CONMEBOL'?1:Math.max(1,n),B=Array.from({length:g},()=>[]);
+for(let i=0;i<ts.length;i+=g){const ix=[...Array(g).keys()].sort(()=>R()-.5);ts.slice(i,i+g).forEach((t,j)=>B[ix[j]].push(t))}
+const gs=B.map((x,i)=>{const gm={name:String.fromCharCode(65+i),teams:x.map(t=>t.name),ms:[]};
+for(let a=0;a<x.length;a++)for(let b=0;b<x.length;b++)if(a!=b)gm.ms.push(rec(run(x[a],x[b],0,null,25)));gm.tab=table(gm);return gm});
+const all=gs.flatMap(gm=>gm.tab.map((r,i)=>({r,i}))).sort((u,v)=>u.i-v.i||pg(v.r)-pg(u.r)||gd(v.r)-gd(u.r)||R()-.5).map(o=>o.r.n);
+let q=all.slice(0,n);const po=[];
+if(c=='UEFA'&&n>12){const m=n-12,pp=all.slice(12,12+4*m).map(a=>M[a]),ko=(a,b)=>{const r=run(a,b,1,null,25);po.push(rec(r));return r.w};q=all.slice(0,12);
+for(let k=0;k<m;k++)q.push(ko(ko(pp[k],pp[3*m+k]),ko(pp[m+k],pp[2*m+k])).name)}
+else pool.push(...all.slice(n,n+(XP[c]||0)).map(a=>M[a]));
+Q.q.push(...q);Q.conf[c]={g:gs,po,n,q}}
+pool.sort((a,b)=>b.elo-a.elo);const g2=(a,b)=>{const r=run(a,b,1,null,25);Q.pl.push(rec(r));return r.w};
+const w1=g2(pool[2],pool[5]),w2=g2(pool[3],pool[4]);Q.q.push(g2(pool[0],w2).name,g2(pool[1],w1).name);
+const u=[...new Set(Q.q)];for(const t of[...T].sort((a,b)=>b.elo-a.elo)){if(u.length>=48)break;if(!u.includes(t.name))u.push(t.name)}
+if(u.length!=48)throw new Error('Qualification failed');Q.q=u;S.qual=Q;refit();save();gv=null;tab='q';render();window.scrollTo(0,0);toast(y+' qualifiers complete')
+}catch(e){toast('Qualifier error: '+e.message)}}
+// ---------- hidden rises & slumps ----------
+// Random and unscheduled. A rise (mostly mid-ranked teams, rarely a low-ranked minnow) or a slump (a top-12 giant) builds over
+// ~40% of its life, holds, then fades. It only boosts/drags the match engine; the visible Elo moves because of the results.
+function setTal(n){const x=S.tr[n],t=M[n];if(!x||!t)return;const p=x.age/x.len,w=p<.4?p/.4:p<.7?1:Math.max(0,1-(p-.7)/.3);t.tal=(x.t=='rise'?1:-1)*x.peak*w}
+function trends(){const tr=S.tr=S.tr||{};T.forEach(t=>t.dev=(t.dev||0)*.88+(R()+R()+R()-1.5)*4);
+for(const n in tr){const x=tr[n];x.age++;if(x.age>=x.len){M[n].tal=0;delete tr[n]}else setTal(n)}
+const rk=[...T].sort((a,b)=>b.elo-a.elo),sc=cl((rk[9].elo-rk[99].elo)/375,1,1.8),free=a=>a.filter(t=>!tr[t.name]),cnt=k=>Object.values(tr).filter(x=>x.t==k).length,pick=a=>a[Math.floor(R()*a.length)];
+if(cnt('rise')<2&&R()<.22){const low=R()<.25,c=free(low?rk.slice(80,170):rk.slice(24,80));if(c.length){const t=pick(c);tr[t.name]={t:'rise',age:0,len:8+Math.floor(R()*5),peak:Math.round(low?14+R()*6:6+R()*5)}}}
+if(cnt('slump')<2&&R()<.2){const c=free(rk.slice(0,14));if(c.length){const t=pick(c);tr[t.name]={t:'slump',age:0,len:5+Math.floor(R()*4),peak:Math.round(6+R()*5)}}}}
+function sim(){try{
+const Q=S.qual;if(!Q||Q.year!=S.year)return simQ();
+S.pq=S.prev;S.prev=Object.fromEntries(T.map(t=>[t.name,Math.round(t.elo)]));
+const y=S.year,q=Q.q.map(n=>M[n]),hs=Q.hosts.map(n=>M[n]),pl=Q.pl,st={sc:{},gf:{},ga:{},mp:{},ups:[]};T.forEach(t=>t.host=0);hs.forEach(h=>h.host=1);
+const s=[...q].sort((a,b)=>((hs.includes(b)?1:0)-(hs.includes(a)?1:0))*1e4+(b.elo-a.elo)),B=drawG(s);
+const G=B.map((ts,i)=>{const g={name:String.fromCharCode(65+i),teams:ts.map(t=>t.name),ms:[]};
+for(let a=0;a<4;a++)for(let b=a+1;b<4;b++)g.ms.push(rec(run(ts[a],ts[b],0,st)));g.tab=table(g);return g});
+const W=G.map(g=>g.tab[0]).sort(cmp),Ru=G.map(g=>g.tab[1]).sort(cmp),Th=G.map(g=>g.tab[2]).sort(cmp).slice(0,8);
+const seeds=[...W,...Ru,...Th].map(r=>M[r.n]);if(seeds.length!=32||seeds.some(x=>!x))throw new Error('Bracket build failed');
+let cur=so(32).map(i=>seeds[i-1]),sfl=[],lastL=null;const rounds=[];
+for(const nm of['Round of 32','Round of 16','Quarterfinals','Semifinals','Final']){const ms=[],w=[],l=[];
+for(let i=0;i<cur.length;i+=2){const a=cur[i],b=cur[i+1],m=run(a,b,1,st,nm=='Round of 32'||nm=='Round of 16'?50:60);ms.push(rec(m));w.push(m.w);l.push(m.w===a?b:a)}
+rounds.push({name:nm,ms});if(nm=='Semifinals')sfl=l;lastL=l;cur=w}
+const tp=run(sfl[0],sfl[1],1,st,60);rounds.push({name:'Third place',ms:[rec(tp)]});
+const ch=cur[0],ru=lastL[0],top=(o,n)=>Object.entries(o).sort((a,b)=>b[1]-a[1]).slice(0,n);
+const L={year:y,hosts:hs.map(h=>h.name),q:q.map(t=>t.name),pl,groups:G,thirds:Th.map(r=>r.n),rounds,w:ch.name,r:ru.name,t:tp.w.name,
+sc:top(st.sc,10),def:Object.keys(st.mp).filter(n=>st.mp[n]>=3).sort((a,b)=>st.ga[a]-st.ga[b]||st.mp[b]-st.mp[a]).slice(0,5).map(n=>[n,st.ga[n],st.mp[n]]),
+ups:st.ups.sort((a,b)=>b.d-a.d).slice(0,5)};
+profile(L);S.hist.push({y,h:L.hosts.join(' / '),w:L.w,r:L.r,t:L.t,sim:1});S.last=L;S.year+=4;trends();refit();save();gv=null;tab='s';render();window.scrollTo(0,0);celebrate(L)
+}catch(e){toast('Sim error: '+e.message)}}
+// ---------- views ----------
+const ml=m=>`<div class="grid grid-cols-[1fr_auto_1fr] gap-2 py-0.5 text-sm"><span class="${m.w==m.a?'font-bold':''}">${m.a}</span><span style="color:var(--y)">${m.ga}–${m.gb}${m.pen?` (${m.pen[0]}–${m.pen[1]}p)`:m.et?' aet':''}</span><span class="text-right ${m.w==m.b?'font-bold':''}">${m.b}</span></div>`;
+const sec=(t,b,o)=>`<details class="card p-3 mb-3" ${o?'open':''}><summary class="font-bold cursor-pointer">${t}</summary><div class="mt-2">${b}</div></details>`;
+const rk=()=>[...T].sort((a,b)=>b.elo-a.elo);
+const V={
+d(){const L=S.last,Q=S.qual&&S.qual.year==S.year;return `<div class="card p-4 mb-3"><div class="text-sm text-slate-400">Next edition · ${S.hist.length} simulated so far</div><div class="shine">World Cup ${S.year}</div>
+<div class="flex gap-2 mt-3 flex-wrap">${Q?`<button class="btn" onclick="sim()">⚽ Simulate World Cup ${S.year}</button><button class="btn2" onclick="tab='q';render()">View qualifiers</button>`:`<button class="btn" onclick="simQ()">🌍 Simulate ${S.year} qualifiers</button>`}<button class="btn2" onclick="reset()">Reset</button></div></div>`
++(L?`<div class="card p-4 mb-3">🏆 <b>${L.w}</b> won ${L.year}<div class="text-sm text-slate-400">Beat ${L.r} in the final · 3rd: ${L.t} · Hosts: ${L.hosts.join(' / ')}</div></div>`:'')
++`<div class="card p-3"><b>Top 10 by Elo</b><div class="sc"><table class="w-full text-sm">${rk().slice(0,10).map((t,i)=>`<tr><td>${i+1}</td><td>${t.name}</td><td>${t.confed}</td><td style="color:var(--g)">${Math.round(t.elo)}</td></tr>`).join('')}</table></div></div>`},
+h(){const b=(k,n)=>`<button class="btn2" style="${hv==k?'border-color:var(--y);color:var(--y)':''}" onclick="hv='${k}';render()">${n}</button>`,sub=`<div class="flex gap-2 mb-3">${b('h','Editions')}${b('m','Most titles')}</div>`;
+if(hv=='m')return sub+titles();
+return sub+`<input id="hq" class="w-full mb-3" placeholder="Search year, host, team…" value="${E(hq)}" oninput="hq=this.value;ht()"><div id="ht" class="card p-2 sc"></div>`},
+t(){if(pt)return prof(pt);return `<div class="flex gap-2 mb-3"><input id="tq" class="flex-1 min-w-0" placeholder="Search team…" value="${E(tq)}" oninput="tq=this.value;pg=0;tt()"><select onchange="tc=this.value;pg=0;tt()"><option value="">All</option>${Object.values(CF).map(c=>`<option ${c==tc?'selected':''}>${c}</option>`).join('')}</select></div><div id="tt"></div>`},
+q(){const Q=S.qual;if(!Q)return '<div class="card p-4">Simulate the qualifiers from the Dashboard first.</div>';if(gv&&gv.t=='q')return gview();
+const tb=(gm,c,gi)=>`<div class="mb-3"><b class="text-sm" style="color:var(--y)">Group ${gm.name}</b><div class="sc"><table class="w-full text-sm"><tr><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr>${gm.tab.map((r,ri)=>`<tr class="cursor-pointer" onclick="gt('q','${c}',${gi},${ri})" style="${Q.q.includes(r.n)?'color:var(--g)':''}"><td>${r.n}</td><td>${r.w+r.d+r.l}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gf-r.ga}</td><td>${r.p}</td></tr>`).join('')}</table></div></div>`;
+return `<div class="card p-3 mb-3"><b style="color:var(--y)">${Q.year} qualifiers</b><div class="text-sm text-slate-400">${Q.year==S.year?'Complete — ready for the World Cup':'Played'} · Hosts: ${Q.hosts.join(' / ')} · qualifiers count 25, early World Cup rounds 50, quarterfinals onward 60</div></div>`
++Object.entries(Q.conf).map(([c,x])=>sec(`${c} — ${x.n} direct spot${x.n==1?'':'s'}`,`<div class="text-sm mb-2"><span style="color:var(--g)">Qualified:</span> ${x.q.join(', ')||'none'}</div>`+(x.po.length?`<b class="text-sm">Playoffs</b>${x.po.map(ml).join('')}`:'')+x.g.map((gm,gi)=>tb(gm,c,gi)).join(''))).join('')
++sec('Intercontinental playoffs (final 2 spots)',Q.pl.map(ml).join(''),1)+sec('All 48 qualified teams',`<div class="text-sm">${Q.q.join(', ')}</div>`)},
+s(){const L=S.last;if(!L)return '<div class="card p-4">Run a simulation from the Dashboard first.</div>';if(gv&&gv.t=='s')return gview();
+const qs=Object.values(CF).map(c=>`<div class="mb-2"><b style="color:var(--g)">${c}</b> <span class="text-sm text-slate-300">${L.q.filter(n=>M[n].confed==c).join(', ')}</span></div>`).join('');
+const gr=L.groups.map((g,gi)=>`<div class="mb-4"><b style="color:var(--y)">Group ${g.name}</b><div class="sc"><table class="w-full text-sm"><tr><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr>${g.tab.map((r,i)=>`<tr class="cursor-pointer" onclick="gt('s','',${gi},${i})" style="${i<2?'color:var(--g)':i==2&&L.thirds.includes(r.n)?'color:var(--y)':''}"><td>${r.n}</td><td>${r.w+r.d+r.l}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gf-r.ga}</td><td>${r.p}</td></tr>`).join('')}</table></div><details class="mt-1"><summary class="text-sm cursor-pointer" style="color:var(--g)">Matches</summary>${g.ms.map(ml).join('')}</details></div>`).join('');
+const ko=[...L.rounds].sort((x,y)=>(x.name=='Final'?1:0)-(y.name=='Final'?1:0)).map(r=>`<div class="mb-3"><b style="color:var(--y)">${r.name}</b>${r.ms.map(ml).join('')}</div>`).join('');
+const st=`<b>Top scorers</b>${L.sc.map(([k,n])=>`<div class="text-sm">${k} — ${n}</div>`).join('')}<b class="block mt-3">Best defences</b>${L.def.map(([n,g,m])=>`<div class="text-sm">${n} — ${g} conceded in ${m}</div>`).join('')}<b class="block mt-3">Biggest upsets</b>${L.ups.length?L.ups.map(u=>`<div class="text-sm">${ml(u.m)}<span class="text-xs text-slate-400">Elo gap ${u.d}</span></div>`).join(''):'<div class="text-sm">None</div>'}`;
+return `<div class="card p-4 mb-3 text-center">🏆 <b class="text-xl" style="color:var(--y)">${L.w}</b><div class="text-sm text-slate-400">World Cup ${L.year} champions</div></div>`+sec('Knockout bracket',ko,1)+sec('Group stage (12 groups)',gr)+sec('Qualified teams (48)',qs+`<b>Intercontinental playoffs</b>${L.pl.map(ml).join('')}`)+sec('Tournament stats',st)}};
+// The one big moment: champion ceremony (trophy, letter-by-letter name, confetti). Tap anywhere to continue.
+function celebrate(L){try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const o=document.createElement('div');o.id='cele';o.setAttribute('role','dialog');
+const cols=['#d4b06a','#f3dca2','#8fe0b5','#f1ead6','#e98b82'];
+o.innerHTML=`<div class="tro">🏆</div><div class="mt-3" style="color:var(--y);font-weight:700">World Cup ${L.year} champions</div><div class="champ">${[...L.w].map((c,i)=>`<span style="animation-delay:${.9+i*.045}s">${c==' '?'&nbsp;':c}</span>`).join('')}</div><div class="text-sm text-slate-400 mt-2">Beat ${L.r} in the final. ${L.t} took third.</div><button class="btn mt-6">Continue</button>`
++Array.from({length:46},(_,i)=>`<i class="cf" style="left:${Math.random()*100}%;background:${cols[i%5]};animation-duration:${2.6+Math.random()*2.4}s;animation-delay:${Math.random()*1.4}s"></i>`).join('');
+o.onclick=()=>o.remove();document.body.appendChild(o);setTimeout(()=>o.remove(),12000)}catch(e){}}
+// A team's own group results, shown from that team's side (France 1-0 Italy here, Italy 0-1 France on Italy's screen)
+function gt(t,c,i,r){gv={t,c,i,r};render();window.scrollTo(0,0)}
+function gview(){const g=gv,Q=S.qual,L=S.last,q=g.t=='q',gm=q?Q.conf[g.c].g[g.i]:L.groups[g.i],row=gm.tab[g.r],n=row.n,
+ms=gm.ms.filter(m=>m.a==n||m.b==n),pos=['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th'][g.r]||(g.r+1)+'th',
+status=q?(Q.q.includes(n)?'Qualified for the World Cup':'Did not qualify directly'):(L.rounds[0].ms.some(m=>m.a==n||m.b==n)?'Advanced to the knockouts':'Eliminated in the group stage'),
+back=`<button class="btn2 mb-3" onclick="gv=null;render()">‹ Back to groups</button>`;
+const rows=ms.map((m,k)=>{const h=m.a==n,gf=h?m.ga:m.gb,ga=h?m.gb:m.ga,o=h?m.b:m.a,r=gf>ga?'W':gf<ga?'L':'D';
+return `<div class="flex items-center gap-2 py-2" style="border-bottom:1px solid rgba(241,234,214,.08)"><span class="wdl ${r}">${r}</span><span class="flex-1">${n} <b style="color:var(--y)">${gf}–${ga}</b> ${o}</span><span class="text-xs text-slate-400">${q?(h?'Home':'Away'):'Match '+(k+1)}</span></div>`}).join('');
+return back+`<div class="card p-4 mb-3"><div class="text-2xl font-extrabold" style="color:var(--y)">${n}</div><div class="text-sm text-slate-400">${q?g.c+' qualifiers '+Q.year:'FIFA World Cup '+L.year}, Group ${gm.name}</div><div class="mt-2 text-sm">Finished ${pos} with ${row.p} point${row.p==1?'':'s'}: ${row.w} won, ${row.d} drawn, ${row.l} lost, goals ${row.gf}–${row.ga}.</div><div class="mt-1 text-sm" style="color:var(--g)">${status}</div></div><div class="card p-3"><b>${n}'s group matches</b>${rows}</div>`}
+function srt(k){if(ts==k)td=-td;else{ts=k;td=k=='n'?1:-1}render()}
+function titles(){const m={},k=n=>n=='West Germany'?'Germany':n,g=n=>m[k(n)]=m[k(n)]||{n:k(n),w:[],r:0,t:0};
+[...H,...S.hist].forEach(h=>{g(h.w).w.push(h.y+(h.sim?'*':''));g(h.r).r++;g(h.t).t++});
+const val=x=>ts=='w'?x.w.length:ts=='r'?x.r:ts=='t'?x.t:x.n,
+a=Object.values(m).filter(x=>x.w.length||x.r).sort((x,y)=>{const p=val(x),q=val(y),c=ts=='n'?p.localeCompare(q):p-q;return c*td||y.w.length-x.w.length||y.r-x.r||y.t-x.t||x.n.localeCompare(y.n)}),
+th=(k,l)=>`<th class="cursor-pointer" onclick="srt('${k}')">${l}${ts==k?(td<0?' ▼':' ▲'):''}</th>`;
+return `<div class="card p-2 sc"><table class="w-full text-sm"><tr><th>#</th>${th('n','Nation')}${th('w','🏆')}${th('r','2nd')}${th('t','3rd')}<th>Title years</th></tr>${a.map((x,i)=>`<tr><td>${i+1}</td><td>${x.n}</td><td style="color:var(--y)">${x.w.length}</td><td>${x.r}</td><td>${x.t}</td><td class="text-slate-400">${x.w.join(', ')||'–'}</td></tr>`).join('')}</table></div><div class="text-xs text-slate-400 mt-2">Counts real history plus your simulated World Cups (* = simulated). West Germany is counted as Germany.</div>`}
+// ---------- team profiles: Elo timeline, WC record, head-to-head ----------
+const RANK=['Group stage','Round of 32','Round of 16','Quarterfinal','Semifinal','Fourth place','Third place','Runner-up','Champion'];
+function profile(L){const y=L.year,st={},lab={'Round of 32':'Round of 32','Round of 16':'Round of 16','Quarterfinals':'Quarterfinal','Semifinals':'Semifinal'};
+L.q.forEach(n=>st[n]='Group stage');
+L.rounds.forEach(r=>r.ms.forEach(m=>{const lo=m.w==m.a?m.b:m.a;if(r.name=='Final'){st[lo]='Runner-up';st[m.w]='Champion'}else if(r.name=='Third place'){st[m.w]='Third place';st[lo]='Fourth place'}else st[lo]=lab[r.name]}));
+const D=S.pf=S.pf||{},g=n=>D[n]=D[n]||{e:[],q:[],h:{}};
+T.forEach(t=>{const p=g(t.name);if(!p.e.length)p.e.push([y-4,(S.pq||S.prev)[t.name]]);p.e.push([y,Math.round(t.elo)])});
+L.q.forEach(n=>g(n).q.push([y,st[n]]));
+[...L.groups.flatMap(x=>x.ms),...L.rounds.flatMap(r=>r.ms)].forEach(m=>{const a=g(m.a).h,b=g(m.b).h;a[m.b]=a[m.b]||[0,0,0];b[m.a]=b[m.a]||[0,0,0];
+if(m.w==m.a){a[m.b][0]++;b[m.a][2]++}else if(m.w==m.b){a[m.b][2]++;b[m.a][0]++}else{a[m.b][1]++;b[m.a][1]++}})}
+function rankAt(n,y){const e=S.pf[n].e.find(x=>x[0]==y);if(!e)return 0;let c=1;for(const m in S.pf){const f=S.pf[m].e.find(x=>x[0]==y);if(f&&f[1]>e[1])c++}return c}
+function pro(i){pt=rk()[i-1].name;render();window.scrollTo(0,0)}
+function prof(n){const t=M[n],p=(S.pf||{})[n]||{e:[],q:[],h:{}},pos=rk().indexOf(t)+1,
+best=p.q.reduce((b,x)=>RANK.indexOf(x[1])>RANK.indexOf(b)?x[1]:b,'none yet'),
+ti=[...H,...S.hist].filter(h=>(h.w=='West Germany'?'Germany':h.w)==n).length;let ch='';
+const ev=(ga?p.e:p.e.slice(-5)).map(x=>[x[0],x[1],rankAt(n,x[0])]);if(ev.length>1){const W=320,Hh=120,rs=ev.map(x=>x[2]),mn=Math.min(...rs),mx=Math.max(...rs),sp=Math.max(1,mx-mn),L=ev.length-1,
+pts=ev.map((x,i)=>[16+i*(W-32)/L,18+((x[2]-mn)/sp)*(Hh-34)]);
+ch=`<svg viewBox="0 0 ${W} ${Hh}" class="w-full"><polyline fill="none" stroke="#8fe0b5" stroke-width="2" points="${pts.map(q=>q.join(',')).join(' ')}"/>${pts.map((q,i)=>`<circle cx="${q[0]}" cy="${q[1]}" r="3" fill="#d4b06a"/><text x="${q[0]}" y="${q[1]-7}" text-anchor="middle" font-size="10" fill="#d4b06a">#${ev[i][2]}</text>`).join('')}</svg><div class="flex justify-between text-xs text-slate-400"><span>${ev[0][0]}: #${ev[0][2]}</span><span>best #${mn} · worst #${mx}</span><span>${ev[L][0]}: #${ev[L][2]}</span></div>`}
+const rv=Object.entries(p.h).sort((a,b)=>b[1].reduce((x,y)=>x+y)-a[1].reduce((x,y)=>x+y)||b[1][0]-a[1][0]).slice(0,5);
+return `<button class="btn2 mb-3" onclick="pt=null;render()">‹ Back to teams</button><div class="card p-4 mb-3"><div class="text-2xl font-extrabold" style="color:var(--y)">${n}</div><div class="text-sm text-slate-400">${t.confed} · rank #${pos} · Elo ${Math.round(t.elo)} · ATT ${t.attack} · DEF ${t.defense}</div><div class="mt-2 text-sm">🏆 ${ti} World Cup title${ti==1?'':'s'} all-time · simulated: ${p.q.length} appearance${p.q.length==1?'':'s'}, best finish: ${best}</div></div>
+<div class="card p-3 mb-3"><b>Ranking timeline</b> <span class="text-xs text-slate-400">(${ga?'all':'last 5'} World Cups)</span>${p.e.length>5?` <button class="text-xs underline" style="color:var(--g)" onclick="ga=!ga;render()">${ga?'Show last 5':'Show all'}</button>`:''}${ch||'<div class="text-sm text-slate-400">Simulate a World Cup to start the timeline.</div>'}</div>
+<div class="card p-3 mb-3"><b>Rivalries</b> <span class="text-xs text-slate-400">(W-D-L, simulated World Cups)</span>${rv.length?rv.map(([o,r])=>`<div class="text-sm py-0.5">${o} — ${r[0]}-${r[1]}-${r[2]}</div>`).join(''):'<div class="text-sm text-slate-400">No World Cup meetings yet.</div>'}</div>
+<div class="card p-3"><b>World Cup record</b>${p.q.length?[...p.q].reverse().map(x=>`<div class="text-sm py-0.5">${x[0]} — ${x[1]}</div>`).join(''):'<div class="text-sm text-slate-400">Has not qualified in a simulated World Cup yet.</div>'}</div>`}
+function ht(){const q=hq.toLowerCase(),a=[...H,...S.hist].sort((x,y)=>(x.y-y.y)*hd).filter(h=>!q||Object.values(h).join(' ').toLowerCase().includes(q));
+$('ht').innerHTML=`<table class="w-full text-sm"><tr><th class="cursor-pointer" onclick="hd=-hd;ht()">Year${hd>0?' ▲':' ▼'}</th><th>Host</th><th>Winner</th><th>Runner-up</th><th>3rd</th></tr>${a.map(h=>`<tr><td>${h.y}${h.sim?' <span class="text-xs" style="color:var(--g)">sim</span>':''}</td><td>${h.h}</td><td style="color:var(--y)">🏆 ${h.w}</td><td>${h.r}</td><td>${h.t}</td></tr>`).join('')}</table>`}
+function tt(){const all=rk(),f=all.map((t,i)=>[t,i+1]).filter(([t])=>(!tc||t.confed==tc)&&t.name.toLowerCase().includes(tq.toLowerCase())),n=Math.max(1,Math.ceil(f.length/25));pg=Math.min(pg,n-1);
+$('tt').innerHTML=`<div class="card p-2 sc"><table class="w-full text-sm"><tr><th>#</th><th>Team</th><th>Conf</th><th>Elo</th><th>Δ</th><th>ATT</th><th>DEF</th></tr>${f.slice(pg*25,pg*25+25).map(([t,i])=>{const d=Math.round(t.elo)-(S.prev[t.name]??Math.round(t.elo));return`<tr onclick="pro(${i})" class="cursor-pointer"><td class="rk r${i}">${i}</td><td>${t.name}</td><td>${t.confed}</td><td style="color:var(--g)">${Math.round(t.elo)}</td><td style="color:${d>0?'#8fe0b5':d<0?'#e98b82':'#9fb3a8'}">${d>0?'+':''}${d}</td><td>${t.attack}</td><td>${t.defense}</td></tr>`}).join('')}</table></div>
+<div class="flex justify-between items-center mt-3 text-sm"><button class="btn2" ${pg?'':'disabled'} onclick="pg--;tt()">‹ Prev</button><span>${pg+1} / ${n} · ${f.length} teams</span><button class="btn2" ${pg<n-1?'':'disabled'} onclick="pg++;tt()">Next ›</button></div>`}
+const TABS=()=>[['d','Dashboard'],['h','History'],['t','Rankings'],['q','Qualifiers '+(S.qual?S.qual.year:S.year)],['s','FIFA World Cup '+(S.last?S.last.year:S.year)]];
+const menu=()=>$('nav').classList.toggle('hidden');
+function go(k){tab=k;pt=null;gv=null;$('nav').classList.add('hidden');render();window.scrollTo(0,0)}
+const hasQ=()=>S.qual&&S.qual.year==S.year;
+function nextStep(){hasQ()?sim():simQ()}
+document.addEventListener('click',e=>{if(!e.target.closest('#mb,#nav'))$('nav').classList.add('hidden')});
+function render(){if(gv&&gv.t!=tab)gv=null;const tb=TABS();$('nav').innerHTML=tb.map(([k,n])=>`<button class="block w-full text-left px-3 py-2 rounded-lg" style="${tab==k?'color:var(--y);background:rgba(212,176,106,.16)':''}" onclick="go('${k}')">${n}</button>`).join('');$('sec').textContent=tb.find(x=>x[0]==tab)[1];$('nx').textContent=hasQ()?'Next ▸ World Cup '+S.year:'Next ▸ '+S.year+' qualifiers';
+$('v').innerHTML=V[tab]();if(tab=='h'&&hv=='h')ht();if(tab=='t'&&!pt)tt()}
+function reset(){if(!rs){rs=1;toast('Tap Reset again to wipe all saved data');setTimeout(()=>rs=0,3000);return}try{localStorage.removeItem('wcie3')}catch(e){}location.reload()}
+// Logo: shown in the header, used as the tab icon, and rendered to a PNG for the phone home-screen icon
+const LOGO='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0a1f18"/><circle cx="32" cy="32" r="24" fill="#12372a" stroke="#d4b06a" stroke-width="3"/><polygon points="32,20 43,28 39,41 25,41 21,28" fill="#d4b06a"/><path d="M32 20V11M43 28l8-3M39 41l5 7M25 41l-5 7M21 28l-8-3" stroke="#d4b06a" stroke-width="2.5" stroke-linecap="round"/></svg>';
+$('logo').innerHTML=LOGO.replace('<svg','<svg width="36" height="36"');$('splogo').innerHTML=LOGO.replace('<svg','<svg width="84" height="84"');setTimeout(()=>{const e=$('splash');e&&e.remove()},1900);
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+render();
+</script></body></html>
